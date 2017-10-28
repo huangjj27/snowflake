@@ -44,7 +44,8 @@ const TIMESTAMP_LEFT_SHIFT: i64 = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID
 const SEQUENC_MASK:i64 = -1 ^ (-1 << SEQUENCE_BITS);
 
 
-/// 
+/// Who generates id. It stores some information used to identify who it is, and
+/// which id it should generate next.
 #[derive(Debug)]
 pub struct SnowFlakeWorker {
     worker_id: i64,
@@ -58,6 +59,7 @@ pub struct SnowFlakeWorker {
 }
 
 impl SnowFlakeWorker {
+    /// generates a new worker, with identifying information.
     pub fn new(worker_id: i64, datacenter_id: i64) -> Self {
         assert!(0 <= worker_id && worker_id <= MAX_WORKER_ID);
         assert!(0 <= datacenter_id && datacenter_id <= MAX_DATACENTER_ID);
@@ -77,8 +79,10 @@ impl SnowFlakeWorker {
         if timestamp == self.last_timestamp {
             self.sequence = (self.sequence + 1) & SEQUENC_MASK;
 
-            // overflow and block to new million seconds
+            // overflow and block until next millisecond
             if self.sequence == 0 {
+                // TODO(huangjj.27@qq.com): optimize the way to block. 
+                // No need to block an entire millisecond
                 sleep(Duration::from_millis(1));
                 timestamp = SystemTime::now();
             }
