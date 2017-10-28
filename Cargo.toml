@@ -1,0 +1,6 @@
+[package]
+name = "snowflake"
+version = "0.1.0"
+authors = ["h_ang!(J27); <huangjj.27@qq.com>"]
+
+[dependencies]
