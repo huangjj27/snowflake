@@ -25,7 +25,6 @@
 // extern crate test;
 
 use std::time::{SystemTime, Duration, UNIX_EPOCH};
-use std::thread::sleep;
 
 pub const WORKER_ID_BITS: i64 = 5;
 pub const DATACENTER_ID_BITS:i64 = 5;
@@ -83,8 +82,7 @@ impl SnowFlakeWorker {
             if self.sequence == 0 {
                 // TODO(huangjj.27@qq.com): optimize the way to block. 
                 // No need to block an entire millisecond
-                sleep(Duration::from_millis(1));
-                timestamp = SystemTime::now();
+                timestamp = self.block_for_new_millis();
             }
         } else {
             self.sequence = 0;
@@ -104,6 +102,16 @@ impl SnowFlakeWorker {
         (self.datacenter_id << DATACENTER_ID_SHIFT) |
         (self.worker_id << WORKER_ID_SHIFT) |
         self.sequence
+    }
+
+    fn block_for_new_millis(&self) -> SystemTime {
+        let mut now: SystemTime;
+        loop {
+            now = SystemTime::now();
+            if now > self.last_timestamp {
+                return now;
+            }
+        }
     }
 }
 
