@@ -16,5 +16,6 @@ TODO:
 
 - make the bits of information configurable
 - make the codes more neat
+- make the EPOCH time configurable
 
 author by [h_ang!(J27);](mailto:hunagjj.27@qq.com)

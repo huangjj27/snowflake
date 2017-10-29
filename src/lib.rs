@@ -24,8 +24,10 @@
 
 // extern crate test;
 
+// TODO(huangjj.27@qq.com): make the EPOCH can be set by configurations
 use std::time::{SystemTime, Duration, UNIX_EPOCH};
 
+// TODO(huangjj.27@qq.com): make the bits configurable
 pub const WORKER_ID_BITS: i64 = 5;
 pub const DATACENTER_ID_BITS:i64 = 5;
 pub const SEQUENCE_BITS: i64 = 12;
@@ -80,8 +82,6 @@ impl SnowFlakeWorker {
 
             // overflow and block until next millisecond
             if self.sequence == 0 {
-                // TODO(huangjj.27@qq.com): optimize the way to block. 
-                // No need to block an entire millisecond
                 timestamp = self.block_for_new_millis();
             }
         } else {
