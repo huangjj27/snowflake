@@ -22,7 +22,7 @@
 // and the benchmark codes.
 #![feature(test)]
 
-// extern crate test;
+extern crate test;
 
 // TODO(huangjj.27@qq.com): make the EPOCH can be set by configurations
 use std::time::{SystemTime, Duration, UNIX_EPOCH};
@@ -127,9 +127,9 @@ mod tests {
         panic!("{:?}", new_id);
     }
 
-    // #[bench]
-    // fn bench_id_generation(bencher: &mut Bencher) {
-    //     let mut worker = SnowFlakeWorker::new(0, 0);
-    //     bencher.iter(|| worker.next_id());
-    // }
+    #[bench]
+    fn bench_id_generation(bencher: &mut Bencher) {
+        let mut worker = SnowFlakeWorker::new(0, 0);
+        bencher.iter(|| worker.next_id());
+    }
 }
