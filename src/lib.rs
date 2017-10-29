@@ -95,10 +95,10 @@ impl SnowFlakeWorker {
             .duration_since(UNIX_EPOCH)
             .unwrap_or(Duration::new(0,0));
 
-        let duration = duration.as_secs() * 1000 + 
-            (duration.subsec_nanos() / 1000) as u64;
+        let duration = (duration.as_secs() * 1_000) as i64 + 
+            (duration.subsec_nanos() / 1_000_000) as i64;
 
-        ((duration as i64) << TIMESTAMP_LEFT_SHIFT) |
+        (duration << TIMESTAMP_LEFT_SHIFT) |
         (self.datacenter_id << DATACENTER_ID_SHIFT) |
         (self.worker_id << WORKER_ID_SHIFT) |
         self.sequence
